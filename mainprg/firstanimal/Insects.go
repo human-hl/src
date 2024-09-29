@@ -3,6 +3,7 @@ package firstanimal
 import "fmt"
 
 type Insects struct {
+	Id_in      int
 	Name       string
 	Crawl      string
 	Irritation string

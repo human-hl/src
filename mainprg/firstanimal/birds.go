@@ -3,6 +3,7 @@ package firstanimal
 import "fmt"
 
 type Birds struct {
+	Id_b     int
 	Name     string
 	Fly      string
 	Song     string

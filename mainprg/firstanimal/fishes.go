@@ -3,6 +3,7 @@ package firstanimal
 import "fmt"
 
 type Fishes struct {
+	Id_f     int
 	Name     string
 	Swim     string
 	Glugglug string

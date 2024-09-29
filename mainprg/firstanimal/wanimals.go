@@ -3,6 +3,7 @@ package firstanimal
 import "fmt"
 
 type Animals struct {
+	Id_an         int
 	Name          string
 	Run           string
 	Frighteningly string
