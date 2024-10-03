@@ -9,6 +9,167 @@ import (
 	"os"
 )
 
+type Animals struct {
+	ID                int
+	Name              string
+	Species           string
+	Age               int
+	Weight            float32
+	Habitat           string
+	Endangered_Status string
+}
+
+func SortDB(answer string) {
+	db, err := sql.Open("mysql", "root:12345@/animalsdb")
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Print(" good ")
+	}
+	defer db.Close()
+	rows, err := db.Query("select * from Animals where name =?", answer)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+
+	animals := []Animals{}
+
+	for rows.Next() {
+		ani := Animals{}
+		err := rows.Scan(&ani.ID, &ani.Name, &ani.Species, &ani.Age, &ani.Weight, &ani.Habitat, &ani.Endangered_Status)
+		if err != nil {
+			fmt.Print(err)
+			continue
+		}
+		animals = append(animals, ani)
+	}
+	fmt.Printf("%-20s %-20s %-20s %-10s %-15s %-15s %s\n", "ID", "Name", "Species", "Age", "Weight", "Habitat", "Endangered Status")
+	fmt.Println("-------------------------------------------------------------------------------------------------------------------")
+	for _, a := range animals {
+		fmt.Printf("%-20d %-20s %-20s %-10d %-15.2f %-20s %s\n", a.ID, a.Name, a.Species, a.Age, a.Weight, a.Habitat, a.Endangered_Status)
+	}
+}
+
+func SortByLiving(answer string) {
+	db, err := sql.Open("mysql", "root:12345@/animalsdb")
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Print(" good ")
+	}
+	defer db.Close()
+	rows, err := db.Query(`select * from Animals where Habitat = ?`, answer)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	animals := []Animals{}
+
+	for rows.Next() {
+		ani := Animals{}
+		err := rows.Scan(&ani.ID, &ani.Name, &ani.Species, &ani.Age, &ani.Weight, &ani.Habitat, &ani.Endangered_Status)
+		if err != nil {
+			fmt.Print(err)
+			continue
+		}
+		animals = append(animals, ani)
+	}
+	fmt.Printf("%-20s %-20s %-20s %-10s %-15s %-15s %s\n", "ID", "Name", "Species", "Age", "Weight", "Habitat", "Endangered Status")
+	fmt.Println("-------------------------------------------------------------------------------------------------------------------")
+	for _, a := range animals {
+		fmt.Printf("%-20d %-20s %-20s %-10d %-15.2f %-20s %s\n", a.ID, a.Name, a.Species, a.Age, a.Weight, a.Habitat, a.Endangered_Status)
+	}
+	if _, err := erroranimals.ErrorLiving(answer); err != nil {
+		fmt.Println(err)
+	}
+
+}
+
+func SortByWeight(answer string) {
+	db, err := sql.Open("mysql", "root:12345@/animalsdb")
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Print(" good ")
+	}
+	defer db.Close()
+	animals := []Animals{}
+	if answer == "больших" {
+		rows, err := db.Query("select * from animals where weight > 100.00")
+		if err != nil {
+			panic(err)
+		}
+		defer rows.Close()
+		for rows.Next() {
+			ani := Animals{}
+			err := rows.Scan(&ani.ID, &ani.Name, &ani.Species, &ani.Age, &ani.Weight, &ani.Habitat, &ani.Endangered_Status)
+			if err != nil {
+				fmt.Print(err)
+				continue
+			}
+			animals = append(animals, ani)
+		}
+	} else {
+		rows, err := db.Query("select * from animals where weight < 100.00")
+		if err != nil {
+			panic(err)
+		}
+		defer rows.Close()
+		for rows.Next() {
+			ani := Animals{}
+			err := rows.Scan(&ani.ID, &ani.Name, &ani.Species, &ani.Age, &ani.Weight, &ani.Habitat, &ani.Endangered_Status)
+			if err != nil {
+				fmt.Print(err)
+				continue
+			}
+			animals = append(animals, ani)
+		}
+	}
+	fmt.Printf("%-20s %-20s %-20s %-10s %-15s %-15s %s\n", "ID", "Name", "Species", "Age", "Weight", "Habitat", "Endangered Status")
+	fmt.Println("-------------------------------------------------------------------------------------------------------------------")
+	for _, a := range animals {
+		fmt.Printf("%-20d %-20s %-20s %-10d %-15.2f %-20s %s\n", a.ID, a.Name, a.Species, a.Age, a.Weight, a.Habitat, a.Endangered_Status)
+	}
+	if _, err := erroranimals.ErrorWeight(answer); err != nil {
+		fmt.Println(err)
+	}
+}
+
+func SortByAge(answer string) {
+	db, err := sql.Open("mysql", "root:12345@/animalsdb")
+	if err != nil {
+		panic(err)
+	} else {
+		fmt.Print(" good ")
+	}
+	defer db.Close()
+	animals := []Animals{}
+	rows, err := db.Query("select * from animals where age = ?", answer)
+	if err != nil {
+		panic(err)
+	}
+	defer rows.Close()
+	for rows.Next() {
+		ani := Animals{}
+		err := rows.Scan(&ani.ID, &ani.Name, &ani.Species, &ani.Age, &ani.Weight, &ani.Habitat, &ani.Endangered_Status)
+		if err != nil {
+			fmt.Print(err)
+			continue
+		}
+		animals = append(animals, ani)
+	}
+	fmt.Printf("%-20s %-20s %-20s %-10s %-15s %-15s %s\n", "ID", "Name", "Species", "Age", "Weight", "Habitat", "Endangered Status")
+	fmt.Println("-------------------------------------------------------------------------------------------------------------------")
+	for _, a := range animals {
+		fmt.Printf("%-20d %-20s %-20s %-10d %-15.2f %-20s %s\n", a.ID, a.Name, a.Species, a.Age, a.Weight, a.Habitat, a.Endangered_Status)
+	}
+	if _, err := erroranimals.ErrorAge(answer); err != nil {
+		fmt.Println(err)
+	}
+
+}
+
 func main() {
 	db, err := sql.Open("mysql", "root:12345@/animalsdb")
 	if err != nil {
@@ -17,6 +178,10 @@ func main() {
 		fmt.Print("good")
 	}
 	defer db.Close()
+	var answersort string
+	fmt.Print("select * from Animals where name = ...")
+	fmt.Fscan(os.Stdin, &answersort)
+	SortDB(answersort)
 
 	var answer string
 	fmt.Print("какой тип животног(насекомое, птица, дикое, амфибия, рыба)")
@@ -26,6 +191,7 @@ func main() {
 	} else {
 		fmt.Println("Valid animal type entered")
 	}
+
 	switch answer {
 	case "насекомое":
 
@@ -381,5 +547,18 @@ func main() {
 			fmt.Println(result.RowsAffected())
 		}
 	}
+
+	var answerliving string
+	fmt.Print("из какой среды обитания вы бы хотели просмотреть животных?(ocean, desert, forest, rainforest, savannah, jungle, domestic)")
+	fmt.Fscan(os.Stdin, &answerliving)
+	SortByLiving(answerliving)
+	var answerweight string
+	fmt.Print("вы хотите увидеть больших животных или маленьких?")
+	fmt.Fscan(os.Stdin, &answerweight)
+	SortByWeight(answerweight)
+	var answerage string
+	fmt.Print("какого возраста вы бы хотели увидеть животных?")
+	fmt.Fscan(os.Stdin, &answerage)
+	SortByAge(answerage)
 
 }
